@@ -5,20 +5,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Greedly</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Greedly - Free online salary calculator. Track your income in real time, calculate daily and hourly rates, plan payments and manage your budget">
+  <meta name="keywords"
+    content="salary calculator, income tracker, hourly rate, daily rate, freelancer, remote work, budget, earnings, finance">
+  <meta name="author" content="Greedly">
+  <meta name="robots" content="index, follow">
+
+  <!-- Hreflang tags for multilingual SEO -->
+  <link rel="alternate" hreflang="ru" href="https://greedly.com/" />
+  <link rel="alternate" hreflang="en" href="https://greedly.com/?lang=en" />
+  <link rel="alternate" hreflang="zh" href="https://greedly.com/?lang=zh" />
+  <link rel="alternate" hreflang="x-default" href="https://greedly.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://greedly.com/">
+  <meta property="og:title" content="Greedly - Track your earnings in real time">
+  <meta property="og:description"
+    content="Free online salary calculator. Track your income in real time and manage your budget">
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://greedly.com/">
+  <meta property="twitter:title" content="Greedly - Track your earnings in real time">
+  <meta property="twitter:description" content="Free online salary calculator. Track your income in real time">
+  <meta property="twitter:image" content="https://greedly.com/img/greedly-preview.png">
+
+  <!-- Additional SEO Tags -->
+  <meta name="theme-color" content="#0d6efd">
+  <meta name="msapplication-TileColor" content="#0d6efd">
+
+  <!-- Yandex.RTB -->
+  <script>window.yaContextCb = window.yaContextCb || []</script>
+  <script src="https://yandex.ru/ads/system/context.js" async></script>
+
+  <!-- Icons -->
   <link rel="icon" href="icon.ico" sizes="64x64" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="css/app.css" rel="stylesheet">
 
-  <!-- Yandex.RTB -->
-  <script>window.yaContextCb = window.yaContextCb || []</script>
-  <script src="https://yandex.ru/ads/system/context.js" async></script>
 </head>
 
 <body>
 
   <main class="container-xxl py-4 mx-auto" id="counter-view">
-
     <div class="d-flex justify-content-end">
       <button type="button" class="btn btn-outline-secondary" id="open-settings" data-i18n-aria-label="ariaSettings">
         <i class="bi bi-gear"></i>
@@ -229,6 +262,45 @@
   <script src="js/i18n.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Greedly",
+    "alternateName": "Salary Calculator",
+    "description": "Free online salary calculator for tracking income in real time",
+    "url": "https://greedly.com/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock"
+    },
+    "featureList": [
+      "Real-time income tracking",
+      "Daily and hourly rate calculation",
+      "Working days calendar",
+      "Payment planning",
+      "Multiple currency support",
+      "Multilingual interface"
+    ],
+    "inLanguage": ["ru", "en", "zh"],
+    "author": {
+      "@type": "Organization",
+      "name": "Greedly"
+    },
+    "publisher": {
+      "@type": "Organization", 
+      "name": "Greedly"
+    },
+    "isAccessibleForFree": true,
+    "isFamilyFriendly": true
+  }
+  </script>
 
   <!-- Yandex.RTB R-A-20095086-1 -->
   <script>

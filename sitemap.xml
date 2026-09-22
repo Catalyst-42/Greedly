@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Russian version -->
+  <url>
+    <loc>https://greedly.com/</loc>
+    <lastmod>2024-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://greedly.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://greedly.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://greedly.com/?lang=zh"/>
+  </url>
+  
+  <!-- English version -->
+  <url>
+    <loc>https://greedly.com/?lang=en</loc>
+    <lastmod>2024-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://greedly.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://greedly.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://greedly.com/?lang=zh"/>
+  </url>
+  
+  <!-- Chinese version -->
+  <url>
+    <loc>https://greedly.com/?lang=zh</loc>
+    <lastmod>2024-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://greedly.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://greedly.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://greedly.com/?lang=zh"/>
+  </url>
+</urlset>

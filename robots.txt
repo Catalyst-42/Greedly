@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://greedly.com/sitemap.xml
+
+# Block common bot paths
+Disallow: /admin/
+Disallow: /api/
+Disallow: /temp/
+Disallow: *.log
+Disallow: *.tmp
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
