@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Greedly</title>
+  <link rel="icon" href="icon.ico" sizes="64x64" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <main class="container-xxl py-4 mx-auto" id="counter-view">
+
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-outline-secondary" id="open-settings" data-i18n-aria-label="ariaSettings">
+        <i class="bi bi-gear"></i>
+      </button>
+    </div>
+
+    <div class="dashboard-layout">
+      <div class="dashboard-primary">
+        <div class="d-flex justify-content-center">
+          <div class="odometer" id="odometer"></div>
+        </div>
+
+        <div class="shift-progress mx-auto" id="shift-progress">
+          <div class="progress shift-progress-track" role="progressbar">
+            <div class="progress-bar" id="shift-bar" style="width:0%"></div>
+          </div>
+          <div class="d-flex justify-content-between small text-body-secondary mt-2">
+            <span id="shift-start">-</span>
+            <span id="shift-remaining" class="shift-remaining-value">-</span>
+            <span id="shift-end">-</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="work-calendar mx-auto d-none" id="work-calendar" data-i18n-aria-label="ariaCalendar">
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span></span><span data-weekday="0"></span><span data-weekday="1"></span><span data-weekday="2"></span><span
+            data-weekday="3"></span><span data-weekday="4"></span><span data-weekday="5"></span><span
+            data-weekday="6"></span>
+        </div>
+        <div class="calendar-days" id="calendar-days"></div>
+      </section>
+    </div>
+
+    <div
+      class="d-flex flex-nowrap justify-content-center align-items-baseline gap-2 mx-auto text-nowrap overflow-hidden"
+      id="stats-grid">
+      <div class="col-auto p-0 flex-shrink-1 text-truncate" id="stat-card-workdays">
+        <div class="card border-0 bg-transparent">
+          <div class="card-body p-0 text-center text-secondary text-truncate">
+            <div class="stat-value d-inline" id="stat-workdays">-</div>
+            <div class="stat-label d-inline small text-secondary ms-1" data-i18n="workdaysShort"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-auto p-0 flex-shrink-1 text-truncate" id="stat-card-paydays">
+        <div class="card border-0 bg-transparent">
+          <div class="card-body p-0 text-center text-secondary text-truncate">
+            <div class="stat-value d-inline" id="stat-paydays">-</div>
+            <div class="stat-label d-inline small text-secondary ms-1" data-i18n="paydays"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-auto p-0 flex-shrink-1 text-truncate" id="stat-card-dayrate">
+        <div class="card border-0 bg-transparent">
+          <div class="card-body p-0 text-center text-secondary text-truncate">
+            <div class="stat-value d-inline" id="stat-dayrate">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-auto p-0 flex-shrink-1 text-truncate" id="stat-card-hourrate">
+        <div class="card border-0 bg-transparent">
+          <div class="card-body p-0 text-center text-secondary text-truncate">
+            <div class="stat-value d-inline" id="stat-hourrate">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center" id="period-switch-wrap">
+      <div class="btn-group btn-group-sm" role="group" id="period-switch">
+        <button type="button" class="btn btn-outline-secondary" data-period="day" data-i18n="day"></button>
+        <button type="button" class="btn btn-outline-secondary" data-period="cycle" data-i18n="cycle"></button>
+        <button type="button" class="btn btn-outline-secondary" data-period="month" data-i18n="month"></button>
+        <button type="button" class="btn btn-outline-secondary" data-period="year" data-i18n="year"></button>
+      </div>
+    </div>
+
+  </main>
+
+  <section class="container-xxl py-4 mx-auto d-none" id="settings-view">
+    <div class="card border-secondary-subtle">
+      <div class="card-body">
+
+        <h1 class="settings-title" data-i18n="settings"></h1>
+
+        <div class="language-setting">
+          <label class="form-label" for="in-language" data-i18n="language"></label>
+          <div class="row language-controls">
+            <div class="col-6">
+              <select class="form-select form-select-sm" id="in-language">
+                <option value="ru" data-i18n="languageRu"></option>
+                <option value="en" data-i18n="languageEn"></option>
+                <option value="zh" data-i18n="languageZh"></option>
+              </select>
+            </div>
+            <div class="col-6">
+              <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="apply-language"
+                data-i18n="apply"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3">
+
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="in-salary" data-i18n="salary"></label>
+            <input type="number" step="1" min="0" class="form-control form-control-sm" id="in-salary">
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="in-currency" data-i18n="currency"></label>
+            <select class="form-select form-select-sm" id="in-currency">
+              <option value="₽" data-i18n="currencyRub"></option>
+              <option value="$" data-i18n="currencyUsd"></option>
+              <option value="€" data-i18n="currencyEur"></option>
+              <option value="₸" data-i18n="currencyKzt"></option>
+              <option value="₴" data-i18n="currencyUah"></option>
+              <option value="¥" data-i18n="currencyJpy"></option>
+              <option value="£" data-i18n="currencyGbp"></option>
+            </select>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="in-period" data-i18n="periodDefault"></label>
+            <select class="form-select form-select-sm" id="in-period">
+              <option value="day" data-i18n="day"></option>
+              <option value="cycle" data-i18n="cycleLong"></option>
+              <option value="month" data-i18n="month"></option>
+              <option value="year" data-i18n="year"></option>
+            </select>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="in-tail" data-i18n="decimals"></label>
+            <select class="form-select form-select-sm" id="in-tail">
+              <option value="0" data-i18n="noCents"></option>
+              <option value="2" data-i18n="decimals2"></option>
+              <option value="3" data-i18n="decimals3"></option>
+              <option value="4" data-i18n="decimals4"></option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" data-i18n="schedule"></label>
+            <div id="days-container"></div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" data-i18n="visibility"></label>
+            <div class="display-options">
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-workdays">
+                <span class="form-check-label" data-i18n="workdays"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-paydays">
+                <span class="form-check-label" data-i18n="paydays"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-dayrate">
+                <span class="form-check-label" data-i18n="dayrate"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-hourrate">
+                <span class="form-check-label" data-i18n="hourrate"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-shift">
+                <span class="form-check-label" data-i18n="shift"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-period">
+                <span class="form-check-label" data-i18n="periodSwitch"></span>
+              </label>
+              <label class="form-check">
+                <input class="form-check-input" type="checkbox" id="show-calendar">
+                <span class="form-check-label" data-i18n="calendar"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="in-paydays" data-i18n="paydayNumbers"></label>
+            <input type="text" class="form-control form-control-sm" id="in-paydays" placeholder="10, 25">
+          </div>
+
+        </div>
+
+        <div class="settings-actions d-flex justify-content-between align-items-center mt-4 pt-3">
+          <div class="settings-primary-actions d-flex gap-2">
+            <button type="button" class="btn btn-primary" id="save-settings" data-i18n="save"></button>
+            <button type="button" class="btn btn-outline-secondary" id="cancel-settings" data-i18n="cancel"></button>
+          </div>
+          <button type="button" class="btn btn-danger reset-settings" id="reset-settings" data-i18n-aria-label="reset">
+            <i class="bi bi-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="js/storage.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/counter.js"></script>
+  <script src="js/odometer.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
