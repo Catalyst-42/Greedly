@@ -64,6 +64,8 @@
     q('in-tail').value = String(config.tailDigits);
     q('in-theme').value = config.theme;
     q('in-paydays').value = config.paydays.join(', ');
+    q('use-production-calendar').checked = config.useProductionCalendar;
+    q('production-calendar-setting').classList.toggle('d-none', config.language !== 'ru');
     q('show-workdays').checked = config.visibility.workdays;
     q('show-paydays').checked = config.visibility.paydays;
     q('show-dayrate').checked = config.visibility.dayrate;
@@ -81,6 +83,7 @@
     const period = q('in-period').value;
     const tailDigits = parseInt(q('in-tail').value, 10);
     const theme = q('in-theme').value;
+    const useProductionCalendar = q('use-production-calendar').checked;
     const visibility = {
       workdays: q('show-workdays').checked,
       paydays: q('show-paydays').checked,
@@ -117,6 +120,7 @@
       period,
       tailDigits,
       theme,
+      useProductionCalendar,
       days,
       paydays: uniqPaydays.length ? uniqPaydays : [10, 25],
       visibility
@@ -142,12 +146,14 @@
     onThemePreview = callbacks.onThemePreview;
 
     document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || q('settings-view').classList.contains('d-none')) return;
+      if (event.key !== 'Escape') return;
+      if (q('settings-view').classList.contains('d-none')) return;
       event.preventDefault();
       q('save-settings').click();
     });
 
     q('save-settings').addEventListener('click', () => {
+      hideResetConfirmation();
       const cfg = Storage.save(readForm());
       hide();
       onChange(cfg);
@@ -163,6 +169,7 @@
     });
 
     q('cancel-settings').addEventListener('click', () => {
+      hideResetConfirmation();
       hide();
       onCancel();
     });
@@ -172,9 +179,23 @@
     });
 
     q('reset-settings').addEventListener('click', () => {
+      if (q('confirm-reset').classList.contains('is-visible')) {
+        hideResetConfirmation();
+        return;
+      }
+      q('confirm-reset').classList.add('is-visible');
+      q('confirm-reset').focus();
+    });
+
+    q('confirm-reset').addEventListener('click', () => {
+      hideResetConfirmation();
       Storage.clear();
       onReset();
     });
+  }
+
+  function hideResetConfirmation() {
+    q('confirm-reset').classList.remove('is-visible');
   }
 
   global.Settings = { init, show, hide, fillForm, readForm };

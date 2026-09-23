@@ -180,6 +180,13 @@
             <div id="days-container"></div>
           </div>
 
+          <div class="col-12" id="production-calendar-setting">
+            <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+              <input class="form-check-input m-0" type="checkbox" id="use-production-calendar">
+              <span class="form-check-label" data-i18n="useProductionCalendar"></span>
+            </label>
+          </div>
+
           <div class="col-12">
             <div>
               <label class="form-label" data-i18n="visibilityStats"></label>
@@ -243,9 +250,12 @@
         </div>
 
         <div class="settings-actions d-flex justify-content-between align-items-center mt-4 pt-3">
-          <button type="button" class="btn btn-danger reset-settings" id="reset-settings" data-i18n-aria-label="reset">
-            <i class="bi bi-trash" aria-hidden="true"></i>
-          </button>
+          <div class="reset-actions d-flex gap-2">
+            <button type="button" class="btn btn-danger reset-settings" id="reset-settings" data-i18n-aria-label="reset">
+              <i class="bi bi-trash" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btn btn-danger reset-confirm" id="confirm-reset" data-i18n="resetConfirm"></button>
+          </div>
           <div class="settings-primary-actions d-flex gap-2">
             <button type="button" class="btn btn-outline-secondary" id="cancel-settings" data-i18n="cancel"></button>
             <button type="button" class="btn btn-primary" id="save-settings" data-i18n="save"></button>

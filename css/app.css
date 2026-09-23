@@ -339,6 +339,26 @@
   line-height: 1;
 }
 
+.reset-confirm {
+  max-width: 0;
+  padding-right: 0;
+  padding-left: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-0.5rem);
+  transition: max-width 0.2s ease, padding 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.reset-confirm.is-visible {
+  max-width: 10rem;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
 .settings-actions {
   gap: 1rem;
   flex-wrap: nowrap;

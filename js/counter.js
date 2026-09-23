@@ -47,12 +47,13 @@
       .catch(() => new Map());
   }
 
-  function usesProductionCalendar() {
-    return !global.I18n || global.I18n.language() === 'ru';
+  function usesProductionCalendar(config) {
+    return config?.useProductionCalendar !== false
+      && (!global.I18n || global.I18n.language() === 'ru');
   }
 
-  function ensureCalendar(start, end) {
-    if (!usesProductionCalendar()) return Promise.resolve();
+  function ensureCalendar(start, end, config) {
+    if (!usesProductionCalendar(config)) return Promise.resolve();
     const startKey = toYYYYMMDD(start);
     const endKey = toYYYYMMDD(end);
     if (calendarCache.has(startKey) && calendarCache.has(endKey)) {
@@ -70,12 +71,17 @@
     return calendarFetchPromise;
   }
 
-  function isProdWorkingDay(date) {
-    if (!usesProductionCalendar()) return null;
+  function isProdWorkingDay(date, config) {
+    if (!usesProductionCalendar(config)) return null;
     const key = toYYYYMMDD(date);
     if (!calendarCache.has(key)) return null;
     const code = calendarCache.get(key);
-    return code === 0 || code === 2;
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+    if (isWeekend && code === 1) return null;
+    if (!isWeekend && code === 1) return false;
+    if (isWeekend && (code === 0 || code === 2)) return true;
+    return null;
   }
 
   // Count working days in a given month (Date for any day of that month).
@@ -102,11 +108,23 @@
 
   // Is this date a working day per schedule + production calendar?
   function isWorkingDay(date, config) {
-    const prod = isProdWorkingDay(date);
-    if (prod === false) return false;
+    const prod = isProdWorkingDay(date, config);
+    if (prod !== null) return prod;
     const idx = (date.getDay() + 6) % 7;
     const day = config.days[idx];
     return day && !day.off;
+  }
+
+  function todayShift(now, config) {
+    if (!isWorkingDay(now, config)) return { off: true };
+    const idx = (now.getDay() + 6) % 7;
+    const day = config.days[idx];
+    if (!day || !day.off) return Schedule.todayShift(now, config);
+    const overrideConfig = {
+      ...config,
+      days: config.days.map((item, index) => index === idx ? { ...item, off: false } : item)
+    };
+    return Schedule.todayShift(now, overrideConfig);
   }
 
   // Minutes worked on a specific day, up to `now` if it's today.
@@ -158,7 +176,7 @@
       const dr = dayRateForMonth(cursor, config);
       const idx = (cursor.getDay() + 6) % 7;
       const day = config.days[idx];
-      const shiftMin = day && !day.off
+      const shiftMin = day && isWorkingDay(cursor, config)
         ? Math.max(0, Schedule.parseHM(day.end) - Schedule.parseHM(day.start))
         : 0;
 
@@ -182,7 +200,7 @@
     const dr = dayRateForMonth(now, config);
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
-    if (!day || day.off) return 0;
+    if (!day || !isWorkingDay(now, config)) return 0;
     const shiftMin = Schedule.parseHM(day.end) - Schedule.parseHM(day.start);
     if (shiftMin <= 0) return 0;
     return dr / shiftMin;
@@ -190,12 +208,12 @@
 
   // Is current time within working hours or is the workday finished?
   function isCurrentlyWorking(config, now) {
-    const shift = Schedule.todayShift(now, config);
+    const shift = todayShift(now, config);
     return !shift.off && (shift.working || shift.finished);
   }
 
   function currentValue(state, config, now) {
-    const shift = Schedule.todayShift(now, config);
+    const shift = todayShift(now, config);
     
     // If workday is finished, show the last calculated full amount
     if (shift.finished) {
@@ -217,6 +235,7 @@
     countWorkingDaysInMonth,
     dayRateForMonth,
     isWorkingDay,
+    todayShift,
     workedMinutesOnDay,
     isCurrentlyWorking,
     fetchRange

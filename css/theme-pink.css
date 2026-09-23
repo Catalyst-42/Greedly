@@ -56,6 +56,12 @@ html[data-theme='pink'] .btn-outline-secondary {
   --bs-btn-active-border-color: #d9b7c6;
 }
 
+html[data-theme='pink'] #period-switch .btn.active {
+  --bs-btn-active-color: #4b3540;
+  --bs-btn-active-bg: #f8e8ef;
+  --bs-btn-active-border-color: #c9829f;
+}
+
 html[data-theme='pink'] .form-control:focus,
 html[data-theme='pink'] .form-select:focus,
 html[data-theme='pink'] .form-check-input:focus {

@@ -32,6 +32,7 @@
     period: 'month',
     tailDigits: 2,
     theme: 'dark',
+    useProductionCalendar: true,
     days: DEFAULT_DAYS.map(d => ({ ...d })),
     paydays: [10, 25],
     visibility: {
@@ -108,6 +109,7 @@
       period: DEFAULT_CONFIG.period,
       tailDigits: DEFAULT_CONFIG.tailDigits,
       theme: DEFAULT_CONFIG.theme,
+      useProductionCalendar: DEFAULT_CONFIG.useProductionCalendar,
       days: DEFAULT_DAYS.map(d => ({ ...d })),
       paydays: DEFAULT_CONFIG.paydays.slice(),
       visibility: { ...DEFAULT_CONFIG.visibility }
@@ -121,6 +123,9 @@
     if (CURRENCIES.includes(raw.currency)) base.currency = raw.currency;
     if (PERIODS.includes(raw.period)) base.period = raw.period;
     if (THEMES.includes(raw.theme)) base.theme = raw.theme;
+    if (typeof raw.useProductionCalendar === 'boolean') {
+      base.useProductionCalendar = raw.useProductionCalendar;
+    }
 
     const tail = Number(raw.tailDigits);
     if (TAILS.includes(tail)) base.tailDigits = tail;

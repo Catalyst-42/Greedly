@@ -148,7 +148,7 @@
         return;
       }
 
-      const productionStatus = Counter.isProdWorkingDay(date);
+      const productionStatus = Counter.isProdWorkingDay(date, config);
       const working = Counter.isWorkingDay(date, config);
       const day = document.createElement('span');
       const isFuture = date > today;
@@ -210,7 +210,7 @@
   function renderTick() {
     if (baseState && odometer) {
       const now = new Date();
-      const shift = Schedule.todayShift(now, config);
+      const shift = Counter.todayShift(now, config);
 
       const value = Counter.currentValue(baseState, config, now);
       odometer.render(value);
@@ -240,7 +240,7 @@
 
   function updateStatus() {
     const now = new Date();
-    const shift = Schedule.todayShift(now, config);
+    const shift = Counter.todayShift(now, config);
     const isCurrentlyWorking = Counter.isCurrentlyWorking(config, now);
 
     const wd = Counter.countWorkingDaysInMonth(now, config);
@@ -252,12 +252,12 @@
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
     let hours = 0;
-    if (day && !day.off) {
+    if (day && Counter.isWorkingDay(now, config)) {
       const s = Schedule.parseHM(day.start);
       const e = Schedule.parseHM(day.end);
       if (e > s) hours = (e - s) / 60;
     }
-    const dr = day && !day.off && hours > 0
+    const dr = day && Counter.isWorkingDay(now, config) && hours > 0
       ? Counter.dayRateForMonth(now, config)
       : 0;
     const hr = hours > 0 ? dr / hours : 0;
@@ -304,7 +304,7 @@
     if (baseInterval === null) {
       baseInterval = setInterval(() => {
         const now = new Date();
-        const shift = Schedule.todayShift(now, config);
+        const shift = Counter.todayShift(now, config);
 
         // Keep the day-off progress clock moving as well.
         if (shift.off || (Counter.isCurrentlyWorking(config, now) && !shift.finished)) {
@@ -350,7 +350,7 @@
     const now = new Date();
     const yearStart = new Date(now.getFullYear(), 0, 1);
     const yearEnd = new Date(now.getFullYear(), 11, 31);
-    Counter.ensureCalendar(yearStart, yearEnd).then(() => {
+    Counter.ensureCalendar(yearStart, yearEnd, config).then(() => {
       recomputeBase();
       updateStatus();
       renderTick();
