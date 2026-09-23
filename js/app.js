@@ -125,7 +125,6 @@
     const leadingDays = (firstDay.getDay() - firstColumn + 7) % 7;
     calendarStart.setDate(calendarStart.getDate() - leadingDays);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const todayShift = Counter.todayShift(now, config);
 
     els.calendarDays.replaceChildren();
 
@@ -160,7 +159,6 @@
       else day.classList.add('calendar-day-off');
       if (productionStatus === false) day.classList.add('calendar-day-holiday');
       if (isToday) day.classList.add('calendar-day-today');
-      if (isToday && working && todayShift.finished) day.classList.add('calendar-day-finished');
       day.setAttribute('aria-label', `${date.getDate()}: ${working ? I18n.t('workingDay') : I18n.t('dayOff')}`);
       els.calendarDays.appendChild(day);
     }

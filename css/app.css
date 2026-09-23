@@ -111,7 +111,7 @@
 }
 
 .calendar-day-off {
-  background-color: var(--bs-bg);
+  background-color: transparent;
   border: 1px solid var(--bs-border-color-translucent);
 }
 
@@ -119,8 +119,8 @@
   background-color: var(--bs-tertiary-bg);
 }
 
-.calendar-day-finished {
-  border: 1px solid var(--bs-primary);
+.calendar-day-off.calendar-day-today {
+  background-color: transparent;
 }
 
 .calendar-day-today::after {
