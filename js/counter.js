@@ -87,16 +87,7 @@
     let count = 0;
     let cursor = new Date(start);
     while (cursor.getTime() <= end.getTime()) {
-      const prod = isProdWorkingDay(cursor);
-      if (prod === false) {
-        // non-working
-      } else if (prod === true) {
-        count++;
-      } else {
-        const idx = (cursor.getDay() + 6) % 7;
-        const day = config.days[idx];
-        if (day && !day.off) count++;
-      }
+      if (isWorkingDay(cursor, config)) count++;
       cursor.setDate(cursor.getDate() + 1);
     }
     return count;

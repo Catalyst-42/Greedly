@@ -274,6 +274,14 @@
   width: 100% !important;
 }
 
+.shift-progress-day-off .shift-progress-track {
+  margin-inline: 0.75rem;
+}
+
+.shift-progress-day-off .d-flex {
+  justify-content: center !important;
+}
+
 .card {
   border-radius: 0.8rem;
   background-color: color-mix(in srgb, var(--bs-body-bg) 82%, var(--bs-tertiary-bg));

@@ -204,6 +204,10 @@
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
   }
 
+  function fmtTime(date) {
+    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+  }
+
   function daysUntilPayday(now, config) {
     const next = Schedule.nextPayday(now, config);
     if (!next) return null;
@@ -224,9 +228,6 @@
     const dd = daysUntilPayday(now, config);
     els.paydays.textContent = dd === null ? '-' : String(dd);
 
-    const dr = Counter.dayRateForMonth(now, config);
-    setMoney(els.dayrate, dr, I18n.rateCurrency(config.currency), config.tailDigits, I18n.t('dayUnit'));
-
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
     let hours = 0;
@@ -235,35 +236,43 @@
       const e = Schedule.parseHM(day.end);
       if (e > s) hours = (e - s) / 60;
     }
+    const dr = day && !day.off && hours > 0
+      ? Counter.dayRateForMonth(now, config)
+      : 0;
     const hr = hours > 0 ? dr / hours : 0;
+    setMoney(els.dayrate, hr * hours, I18n.rateCurrency(config.currency), config.tailDigits, I18n.t('dayUnit'));
     setMoney(els.hourrate, hr, I18n.rateCurrency(config.currency), config.tailDigits, I18n.t('hourUnit'));
 
-    if (shift.off || !config.visibility.shift) {
+    if (!config.visibility.shift) {
       els.shiftBlock.classList.add('d-none');
     } else {
       els.shiftBlock.classList.remove('d-none');
-      els.shiftBar.style.width = (shift.ratio * 100).toFixed(2) + '%';
+      const isDayOff = shift.off;
+      const dayProgress = (now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60) / 1440;
+      els.shiftBlock.classList.toggle('shift-progress-day-off', isDayOff);
+      els.shiftBar.style.width = ((isDayOff ? dayProgress : shift.ratio) * 100).toFixed(2) + '%';
 
       // Add class for finished day to fix width
-      if (shift.finished) {
+      if (!isDayOff && shift.finished) {
         els.shiftBar.classList.add('day-finished');
       } else {
         els.shiftBar.classList.remove('day-finished');
       }
 
-      els.shiftStart.textContent = shift.start;
-      els.shiftEnd.textContent = shift.end;
-      if (shift.finished) {
-        els.shiftRemaining.textContent = I18n.t('dayFinished');
-      } else if (!isCurrentlyWorking) {
-        // Show waiting status when not currently working
+      els.shiftStart.textContent = isDayOff ? '' : shift.start;
+      els.shiftEnd.textContent = isDayOff ? '' : shift.end;
+      if (isDayOff) {
         const clock = document.createElement('i');
         clock.className = 'bi bi-clock shift-clock-icon';
         clock.setAttribute('aria-hidden', 'true');
-        els.shiftRemaining.replaceChildren(clock, document.createTextNode(I18n.t('waitingForWork')));
+        els.shiftRemaining.replaceChildren(clock, document.createTextNode(fmtTime(now)));
+      } else if (shift.finished) {
+        els.shiftRemaining.replaceChildren();
+      } else if (!isCurrentlyWorking) {
+        els.shiftRemaining.replaceChildren();
       } else {
         const clock = document.createElement('i');
-        clock.className = 'bi bi-clock shift-clock-icon';
+        clock.className = 'bi bi-hourglass-split shift-clock-icon';
         clock.setAttribute('aria-hidden', 'true');
         els.shiftRemaining.replaceChildren(clock, document.createTextNode(fmtRemaining(shift.remainingMin)));
       }
@@ -276,8 +285,8 @@
         const now = new Date();
         const shift = Schedule.todayShift(now, config);
 
-        // Only update if currently working or if day is not finished yet
-        if (Counter.isCurrentlyWorking(config, now) && !shift.finished) {
+        // Keep the day-off progress clock moving as well.
+        if (shift.off || (Counter.isCurrentlyWorking(config, now) && !shift.finished)) {
           recomputeBase();
           updateStatus();
         }
