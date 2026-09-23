@@ -172,14 +172,12 @@
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
-      if (q('settings-view').classList.contains('d-none')) return;
       event.preventDefault();
-      if (q('confirm-reset').classList.contains('is-visible')) {
-        hideResetConfirmation();
-        q('reset-settings').focus();
-        return;
+      if (q('settings-view').classList.contains('d-none')) {
+        q('open-settings').click();
+      } else {
+        q('save-settings').click();
       }
-      q('save-settings').click();
     });
 
     q('save-settings').addEventListener('click', () => {
@@ -211,12 +209,13 @@
     });
 
     q('reset-settings').addEventListener('click', () => {
-      if (q('confirm-reset').classList.contains('is-visible')) {
+      const confirmation = q('confirm-reset');
+      if (confirmation.classList.contains('is-visible')) {
         hideResetConfirmation();
         return;
       }
-      q('confirm-reset').classList.add('is-visible');
-      q('confirm-reset').focus();
+      confirmation.classList.add('is-visible');
+      confirmation.focus();
     });
 
     q('confirm-reset').addEventListener('click', () => {
