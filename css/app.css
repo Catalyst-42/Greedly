@@ -122,10 +122,14 @@
   border: 1px solid var(--bs-border-color-translucent);
 }
 
+.calendar-day-finished {
+  border: 1px solid var(--bs-primary);
+}
+
 .calendar-day-today::after {
   content: '';
-  width: 0.35rem;
-  height: 0.35rem;
+  width: 0.30rem;
+  height: 0.30rem;
   position: absolute;
   inset: 50% auto auto 50%;
   background-color: var(--bs-primary);

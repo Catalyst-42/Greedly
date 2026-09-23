@@ -175,7 +175,40 @@
             </select>
           </div>
 
-          <div class="col-12">
+            <div class="col-12">
+              <label class="form-label" for="in-schedule-mode" data-i18n="scheduleMode"></label>
+              <select class="form-select" id="in-schedule-mode">
+                <option value="weekly" data-i18n="scheduleModeWeekly"></option>
+                <option value="shift" data-i18n="scheduleModeShift"></option>
+              </select>
+            </div>
+
+            <div class="col-12 d-none" id="shift-schedule-settings">
+              <div class="row g-3">
+                <div class="col-6 col-md-3">
+                  <label class="form-label" for="in-shift-work-days" data-i18n="shiftWorkDays"></label>
+                  <input type="number" class="form-control" id="in-shift-work-days" min="1" max="365" step="1">
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="form-label" for="in-shift-rest-days" data-i18n="shiftRestDays"></label>
+                  <input type="number" class="form-control" id="in-shift-rest-days" min="1" max="365" step="1">
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="form-label" for="in-shift-start-date" data-i18n="shiftStartDate"></label>
+                  <input type="date" class="form-control" id="in-shift-start-date">
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="form-label" for="in-shift-start-time" data-i18n="shiftStartTime"></label>
+                  <input type="time" class="form-control" id="in-shift-start-time">
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="form-label" for="in-shift-end-time" data-i18n="shiftEndTime"></label>
+                  <input type="time" class="form-control" id="in-shift-end-time">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12" id="weekly-schedule-settings">
             <label class="form-label" data-i18n="schedule"></label>
             <div id="days-container"></div>
           </div>

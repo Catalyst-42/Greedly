@@ -125,6 +125,7 @@
     const leadingDays = (firstDay.getDay() - firstColumn + 7) % 7;
     calendarStart.setDate(calendarStart.getDate() - leadingDays);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const todayShift = Counter.todayShift(now, config);
 
     els.calendarDays.replaceChildren();
 
@@ -159,6 +160,7 @@
       else day.classList.add('calendar-day-off');
       if (productionStatus === false) day.classList.add('calendar-day-holiday');
       if (isToday) day.classList.add('calendar-day-today');
+      if (isToday && working && todayShift.finished) day.classList.add('calendar-day-finished');
       day.setAttribute('aria-label', `${date.getDate()}: ${working ? I18n.t('workingDay') : I18n.t('dayOff')}`);
       els.calendarDays.appendChild(day);
     }
@@ -252,13 +254,17 @@
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
     let hours = 0;
-    if (day && Counter.isWorkingDay(now, config)) {
+    let rateDate = now;
+    if (config.scheduleMode === 'shift' && !shift.off) {
+      hours = shift.durationMinutes / 60;
+      rateDate = shift.shiftDate;
+    } else if (day && Counter.isWorkingDay(now, config)) {
       const s = Schedule.parseHM(day.start);
       const e = Schedule.parseHM(day.end);
       if (e > s) hours = (e - s) / 60;
     }
-    const dr = day && Counter.isWorkingDay(now, config) && hours > 0
-      ? Counter.dayRateForMonth(now, config)
+    const dr = hours > 0 && (config.scheduleMode === 'shift' || (day && Counter.isWorkingDay(now, config)))
+      ? Counter.dayRateForMonth(rateDate, config)
       : 0;
     const hr = hours > 0 ? dr / hours : 0;
     setMoney(els.dayrate, hr * hours, I18n.rateCurrency(config.currency), config.tailDigits, I18n.t('dayUnit'));
@@ -450,7 +456,7 @@
       recomputeBase();
       updateStatus();
       renderTick();
-    });
+})(window);
 
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && baseState && config) {

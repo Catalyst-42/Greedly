@@ -66,6 +66,13 @@
     q('in-paydays').value = config.paydays.join(', ');
     q('use-production-calendar').checked = config.useProductionCalendar;
     q('production-calendar-setting').classList.toggle('d-none', config.language !== 'ru');
+    q('in-schedule-mode').value = config.scheduleMode;
+    q('in-shift-work-days').value = String(config.shiftWorkDays);
+    q('in-shift-rest-days').value = String(config.shiftRestDays);
+    q('in-shift-start-date').value = config.shiftStartDate;
+    q('in-shift-start-time').value = config.shiftStartTime;
+    q('in-shift-end-time').value = config.shiftEndTime;
+    updateScheduleModeFields();
     q('show-workdays').checked = config.visibility.workdays;
     q('show-paydays').checked = config.visibility.paydays;
     q('show-dayrate').checked = config.visibility.dayrate;
@@ -84,6 +91,12 @@
     const tailDigits = parseInt(q('in-tail').value, 10);
     const theme = q('in-theme').value;
     const useProductionCalendar = q('use-production-calendar').checked;
+    const scheduleMode = q('in-schedule-mode').value;
+    const shiftWorkDays = parseInt(q('in-shift-work-days').value, 10);
+    const shiftRestDays = parseInt(q('in-shift-rest-days').value, 10);
+    const shiftStartDate = q('in-shift-start-date').value;
+    const shiftStartTime = q('in-shift-start-time').value;
+    const shiftEndTime = q('in-shift-end-time').value;
     const visibility = {
       workdays: q('show-workdays').checked,
       paydays: q('show-paydays').checked,
@@ -121,6 +134,12 @@
       tailDigits,
       theme,
       useProductionCalendar,
+      scheduleMode,
+      shiftWorkDays,
+      shiftRestDays,
+      shiftStartDate,
+      shiftStartTime,
+      shiftEndTime,
       days,
       paydays: uniqPaydays.length ? uniqPaydays : [10, 25],
       visibility
@@ -138,6 +157,12 @@
     q('counter-view').classList.remove('d-none');
   }
 
+  function updateScheduleModeFields() {
+    const isShift = q('in-schedule-mode').value === 'shift';
+    q('shift-schedule-settings').classList.toggle('d-none', !isShift);
+    q('weekly-schedule-settings').classList.toggle('d-none', isShift);
+  }
+
   function init(callbacks) {
     onChange = callbacks.onChange;
     const onLanguageChange = callbacks.onLanguageChange;
@@ -149,6 +174,11 @@
       if (event.key !== 'Escape') return;
       if (q('settings-view').classList.contains('d-none')) return;
       event.preventDefault();
+      if (q('confirm-reset').classList.contains('is-visible')) {
+        hideResetConfirmation();
+        q('reset-settings').focus();
+        return;
+      }
       q('save-settings').click();
     });
 
@@ -167,6 +197,8 @@
     q('in-theme').addEventListener('change', () => {
       if (onThemePreview) onThemePreview(q('in-theme').value);
     });
+
+    q('in-schedule-mode').addEventListener('change', updateScheduleModeFields);
 
     q('cancel-settings').addEventListener('click', () => {
       hideResetConfirmation();

@@ -106,9 +106,40 @@
     return config.salary / wd;
   }
 
+  function dateAtTime(dateString, timeString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes);
+  }
+
+  function shiftWindow(date, config) {
+    const start = new Date(date);
+    const [hours, minutes] = config.shiftStartTime.split(':').map(Number);
+    start.setHours(hours, minutes, 0, 0);
+    const end = new Date(start);
+    const [endHours, endMinutes] = config.shiftEndTime.split(':').map(Number);
+    end.setHours(endHours, endMinutes, 0, 0);
+    if (end <= start) end.setDate(end.getDate() + 1);
+    return { start, end };
+  }
+
+  function isShiftCycleWorkDate(date, config) {
+    const cycleStart = dateAtTime(config.shiftStartDate, config.shiftStartTime);
+    const startDay = new Date(cycleStart.getFullYear(), cycleStart.getMonth(), cycleStart.getDate());
+    const currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const elapsedDays = Math.floor((currentDay - startDay) / 86400000);
+    const cycleLength = config.shiftWorkDays + config.shiftRestDays;
+    const position = ((elapsedDays % cycleLength) + cycleLength) % cycleLength;
+    return position < config.shiftWorkDays;
+  }
+
   // Is this date a working day per schedule + production calendar?
   function isWorkingDay(date, config) {
     const prod = isProdWorkingDay(date, config);
+    if (config.scheduleMode === 'shift') {
+      if (prod !== null) return prod;
+      return isShiftCycleWorkDate(date, config);
+    }
     if (prod !== null) return prod;
     const idx = (date.getDay() + 6) % 7;
     const day = config.days[idx];
@@ -116,6 +147,55 @@
   }
 
   function todayShift(now, config) {
+    if (config.scheduleMode === 'shift') {
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const candidates = [today, new Date(today.getTime() - 86400000)];
+      for (const candidate of candidates) {
+        if (!isWorkingDay(candidate, config)) continue;
+        const window = shiftWindow(candidate, config);
+        if (now >= window.start && now < window.end) {
+          return {
+            off: false,
+            start: config.shiftStartTime,
+            end: config.shiftEndTime,
+            ratio: (now - window.start) / (window.end - window.start),
+            finished: false,
+            remainingMin: Math.max(0, (window.end - now) / 60000),
+            working: true,
+            durationMinutes: (window.end - window.start) / 60000,
+            shiftDate: candidate
+          };
+        }
+      }
+      if (isWorkingDay(today, config)) {
+        const window = shiftWindow(today, config);
+        if (now < window.start) {
+          return {
+            off: false,
+            start: config.shiftStartTime,
+            end: config.shiftEndTime,
+            ratio: 0,
+            finished: false,
+            remainingMin: (window.end - now) / 60000,
+            working: false,
+            durationMinutes: (window.end - window.start) / 60000,
+            shiftDate: today
+          };
+        }
+        return {
+          off: false,
+          start: config.shiftStartTime,
+          end: config.shiftEndTime,
+          ratio: 1,
+          finished: true,
+          remainingMin: 0,
+          working: false,
+          durationMinutes: (window.end - window.start) / 60000,
+          shiftDate: today
+        };
+      }
+      return { off: true };
+    }
     if (!isWorkingDay(now, config)) return { off: true };
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
@@ -129,6 +209,20 @@
 
   // Minutes worked on a specific day, up to `now` if it's today.
   function workedMinutesOnDay(date, config, now) {
+    if (config.scheduleMode === 'shift') {
+      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const dayEnd = new Date(dayStart.getTime() + 86400000);
+      const limit = Math.min(now.getTime(), dayEnd.getTime());
+      let total = 0;
+      for (const shiftDate of [dayStart, new Date(dayStart.getTime() - 86400000)]) {
+        if (!isWorkingDay(shiftDate, config)) continue;
+        const window = shiftWindow(shiftDate, config);
+        const from = Math.max(window.start.getTime(), dayStart.getTime());
+        const to = Math.min(window.end.getTime(), limit);
+        if (to > from) total += (to - from) / 60000;
+      }
+      return total;
+    }
     if (!isWorkingDay(date, config)) return 0;
 
     const idx = (date.getDay() + 6) % 7;
@@ -168,7 +262,26 @@
       start = Schedule.monthStart(now);
     }
 
-    // Sum over all days from start to today (inclusive).
+    if (config.scheduleMode === 'shift') {
+      const periodStart = start.getTime();
+      let total = 0;
+      let cursor = new Date(start.getTime() - 86400000);
+      while (cursor <= now) {
+        if (isWorkingDay(cursor, config)) {
+          const window = shiftWindow(cursor, config);
+          const from = Math.max(window.start.getTime(), periodStart);
+          const to = Math.min(window.end.getTime(), now.getTime());
+          if (to > from) {
+            const duration = (window.end - window.start) / 60000;
+            const perMin = dayRateForMonth(cursor, config) / duration;
+            total += (to - from) / 60000 * perMin;
+          }
+        }
+        cursor.setDate(cursor.getDate() + 1);
+      }
+      return { base: total, at: now.getTime() };
+    }
+
     let total = 0;
     let cursor = new Date(start);
     while (cursor.getTime() <= today.getTime()) {
@@ -197,6 +310,11 @@
 
   // Rate per minute for the *current* day (used for light extension).
   function currentPerMinute(config, now) {
+    if (config.scheduleMode === 'shift') {
+      const shift = todayShift(now, config);
+      if (shift.off || !shift.working || !shift.durationMinutes) return 0;
+      return dayRateForMonth(shift.shiftDate, config) / shift.durationMinutes;
+    }
     const dr = dayRateForMonth(now, config);
     const idx = (now.getDay() + 6) % 7;
     const day = config.days[idx];
