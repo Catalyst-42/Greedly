@@ -103,14 +103,14 @@
           <label class="form-label" for="in-language" data-i18n="language"></label>
           <div class="row language-controls">
             <div class="col-6">
-              <select class="form-select form-select-sm" id="in-language">
+              <select class="form-select form-select" id="in-language">
                 <option value="ru" data-i18n="languageRu"></option>
                 <option value="en" data-i18n="languageEn"></option>
                 <option value="zh" data-i18n="languageZh"></option>
               </select>
             </div>
             <div class="col-6">
-              <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="apply-language"
+              <button type="button" class="btn btn btn-outline-secondary w-100" id="apply-language"
                 data-i18n="apply"></button>
             </div>
           </div>
@@ -118,14 +118,14 @@
 
         <div class="row g-3">
 
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-6">
             <label class="form-label" for="in-salary" data-i18n="salary"></label>
-            <input type="number" step="1" min="0" class="form-control form-control-sm" id="in-salary">
+            <input type="number" step="1" min="0" class="form-control form-control" id="in-salary">
           </div>
 
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-6">
             <label class="form-label" for="in-currency" data-i18n="currency"></label>
-            <select class="form-select form-select-sm" id="in-currency">
+            <select class="form-select form-select" id="in-currency">
               <option value="₽" data-i18n="currencyRub"></option>
               <option value="$" data-i18n="currencyUsd"></option>
               <option value="€" data-i18n="currencyEur"></option>
@@ -136,9 +136,9 @@
             </select>
           </div>
 
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-6">
             <label class="form-label" for="in-period" data-i18n="periodDefault"></label>
-            <select class="form-select form-select-sm" id="in-period">
+            <select class="form-select form-select" id="in-period">
               <option value="day" data-i18n="day"></option>
               <option value="cycle" data-i18n="cycleLong"></option>
               <option value="month" data-i18n="month"></option>
@@ -146,9 +146,9 @@
             </select>
           </div>
 
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-6">
             <label class="form-label" for="in-tail" data-i18n="decimals"></label>
-            <select class="form-select form-select-sm" id="in-tail">
+            <select class="form-select form-select" id="in-tail">
               <option value="0" data-i18n="noCents"></option>
               <option value="2" data-i18n="decimals2"></option>
               <option value="3" data-i18n="decimals3"></option>
@@ -162,42 +162,63 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label" data-i18n="visibility"></label>
-            <div class="display-options">
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-workdays">
-                <span class="form-check-label" data-i18n="workdays"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-paydays">
-                <span class="form-check-label" data-i18n="paydays"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-dayrate">
-                <span class="form-check-label" data-i18n="dayrate"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-hourrate">
-                <span class="form-check-label" data-i18n="hourrate"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-shift">
-                <span class="form-check-label" data-i18n="shift"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-period">
-                <span class="form-check-label" data-i18n="periodSwitch"></span>
-              </label>
-              <label class="form-check">
-                <input class="form-check-input" type="checkbox" id="show-calendar">
-                <span class="form-check-label" data-i18n="calendar"></span>
-              </label>
+            <div>
+              <label class="form-label" data-i18n="visibilityStats"></label>
+              <div class="row row-cols-1 row-cols-2 g-3">
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-workdays">
+                    <span class="form-check-label" data-i18n="workdays"></span>
+                  </label>
+                </div>
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-paydays">
+                    <span class="form-check-label" data-i18n="paydays"></span>
+                  </label>
+                </div>
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-dayrate">
+                    <span class="form-check-label" data-i18n="dayrate"></span>
+                  </label>
+                </div>
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-hourrate">
+                    <span class="form-check-label" data-i18n="hourrate"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="form-label" data-i18n="visibilityBlocks"></label>
+              <div class="row row-cols-1 row-cols-2 g-3">
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-shift">
+                    <span class="form-check-label" data-i18n="shift"></span>
+                  </label>
+                </div>
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-period">
+                    <span class="form-check-label" data-i18n="periodSwitch"></span>
+                  </label>
+                </div>
+                <div class="col">
+                  <label class="form-check d-flex align-items-center gap-2 p-0 m-0">
+                    <input class="form-check-input m-0" type="checkbox" id="show-calendar">
+                    <span class="form-check-label" data-i18n="calendar"></span>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="col-12">
             <label class="form-label" for="in-paydays" data-i18n="paydayNumbers"></label>
-            <input type="text" class="form-control form-control-sm" id="in-paydays" placeholder="10, 25">
+            <input type="text" class="form-control form-control" id="in-paydays" placeholder="10, 25">
           </div>
 
         </div>

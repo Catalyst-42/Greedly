@@ -17,6 +17,8 @@
   "decimals4": "4 знака",
   "schedule": "График по дням",
   "visibility": "Отображать на главной",
+  "visibilityStats": "Статистика",
+  "visibilityBlocks": "Блоки",
   "workdays": "Рабочих дней в месяце",
   "workdaysShort": "Рабочих дней в месяце",
   "paydays": "Дней до выплаты",

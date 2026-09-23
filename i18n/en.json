@@ -17,6 +17,8 @@
   "decimals4": "4 places",
   "schedule": "Weekly schedule",
   "visibility": "Show on main screen",
+  "visibilityStats": "Statistics",
+  "visibilityBlocks": "Blocks",
   "workdays": "Working days this month",
   "workdaysShort": "Working days in month",
   "paydays": "Days until payday",
