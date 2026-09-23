@@ -40,6 +40,27 @@
     });
   }
 
+  function applyTheme(theme) {
+    const selectedTheme = ['dark', 'light', 'pink'].includes(theme) ? theme : 'dark';
+    const themeColors = {
+      dark: '#212529',
+      light: '#f8f9fa',
+      pink: '#fff8fb',
+    };
+    const themeIcons = {
+      dark: 'icons/icon-dark.ico',
+      light: 'icons/icon-light.ico',
+      pink: 'icons/icon-pink.ico'
+    };
+    document.documentElement.dataset.bsTheme = selectedTheme === 'pink' ? 'light' : selectedTheme;
+    document.documentElement.dataset.theme = selectedTheme;
+    document.documentElement.style.colorScheme = selectedTheme === 'pink' ? 'light' : selectedTheme;
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', themeColors[selectedTheme]);
+    const favicon = document.getElementById('app-favicon');
+    if (favicon) favicon.setAttribute('href', themeIcons[selectedTheme]);
+  }
+
   function applyVisibility() {
     const visibility = config.visibility;
     const blocks = [
@@ -314,6 +335,7 @@
 
   async function applyConfig(newConfig) {
     config = newConfig;
+    applyTheme(config.theme);
     await I18n.load(config.language);
     markActivePeriod();
     applyVisibility();
@@ -375,6 +397,9 @@
         Storage.savePeriod(period);
         await applyConfig(cfg);
         global.Settings.fillForm(cfg);
+      },
+      onThemePreview: (theme) => {
+        applyTheme(theme);
       },
       onCancel: async () => {
         if (settingsSnapshot) {

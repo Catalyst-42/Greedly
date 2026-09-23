@@ -7,6 +7,7 @@
   let onChange = null;
   let onCancel = null;
   let onReset = null;
+  let onThemePreview = null;
 
   function buildDayRows(config) {
     const container = q('days-container');
@@ -61,6 +62,7 @@
     q('in-currency').value = config.currency;
     q('in-period').value = config.period;
     q('in-tail').value = String(config.tailDigits);
+    q('in-theme').value = config.theme;
     q('in-paydays').value = config.paydays.join(', ');
     q('show-workdays').checked = config.visibility.workdays;
     q('show-paydays').checked = config.visibility.paydays;
@@ -78,6 +80,7 @@
     const currency = q('in-currency').value;
     const period = q('in-period').value;
     const tailDigits = parseInt(q('in-tail').value, 10);
+    const theme = q('in-theme').value;
     const visibility = {
       workdays: q('show-workdays').checked,
       paydays: q('show-paydays').checked,
@@ -113,6 +116,7 @@
       currency,
       period,
       tailDigits,
+      theme,
       days,
       paydays: uniqPaydays.length ? uniqPaydays : [10, 25],
       visibility
@@ -135,6 +139,7 @@
     const onLanguageChange = callbacks.onLanguageChange;
     onCancel = callbacks.onCancel;
     onReset = callbacks.onReset;
+    onThemePreview = callbacks.onThemePreview;
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape' || q('settings-view').classList.contains('d-none')) return;
@@ -153,9 +158,17 @@
       onLanguageChange(cfg);
     });
 
+    q('in-theme').addEventListener('change', () => {
+      if (onThemePreview) onThemePreview(q('in-theme').value);
+    });
+
     q('cancel-settings').addEventListener('click', () => {
       hide();
       onCancel();
+    });
+
+    q('close-settings').addEventListener('click', () => {
+      q('cancel-settings').click();
     });
 
     q('reset-settings').addEventListener('click', () => {

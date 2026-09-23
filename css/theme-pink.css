@@ -1,0 +1,69 @@
+html[data-theme='pink'] {
+  --bs-body-bg: #fff8fb;
+  --bs-body-color: #4b3540;
+  --bs-emphasis-color: #38242d;
+  --bs-secondary-color: #927582;
+  --bs-secondary-bg: #f8e8ef;
+  --bs-tertiary-bg: #fceff4;
+  --bs-border-color: #e9ccd8;
+  --bs-border-color-translucent: rgba(180, 113, 140, 0.2);
+  --bs-primary: #c9829f;
+  --bs-primary-rgb: 201, 130, 159;
+  --bs-primary-text-emphasis: #89556d;
+  --bs-primary-bg-subtle: #f5dfe8;
+  --bs-primary-border-subtle: #e8bdce;
+  --bs-link-color: #a96883;
+  --bs-link-hover-color: #89556d;
+  --bs-success: #91b7a4;
+  --bs-success-rgb: 145, 183, 164;
+  --bs-warning: #d8b27d;
+  --bs-warning-rgb: 216, 178, 125;
+  --bs-danger: #c98989;
+  --bs-danger-rgb: 201, 137, 137;
+  --bs-info: #91b5c1;
+  --bs-info-rgb: 145, 181, 193;
+}
+
+html[data-theme='pink'] body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+html[data-theme='pink'] .shift-progress-track .progress-bar,
+html[data-theme='pink'] .bg-primary {
+  background-color: var(--bs-primary) !important;
+}
+
+html[data-theme='pink'] .btn-primary {
+  --bs-btn-color: #fff8fb;
+  --bs-btn-bg: #c9829f;
+  --bs-btn-border-color: #c9829f;
+  --bs-btn-hover-color: #fff8fb;
+  --bs-btn-hover-bg: #b97291;
+  --bs-btn-hover-border-color: #b97291;
+  --bs-btn-active-bg: #a96883;
+  --bs-btn-active-border-color: #a96883;
+}
+
+html[data-theme='pink'] .btn-outline-secondary {
+  --bs-btn-color: #927582;
+  --bs-btn-border-color: #d9b7c6;
+  --bs-btn-hover-color: #4b3540;
+  --bs-btn-hover-bg: #f8e8ef;
+  --bs-btn-hover-border-color: #c9829f;
+  --bs-btn-active-color: #4b3540;
+  --bs-btn-active-bg: transparent;
+  --bs-btn-active-border-color: #d9b7c6;
+}
+
+html[data-theme='pink'] .form-control:focus,
+html[data-theme='pink'] .form-select:focus,
+html[data-theme='pink'] .form-check-input:focus {
+  border-color: #dcaabd;
+  box-shadow: 0 0 0 0.25rem rgba(201, 130, 159, 0.2);
+}
+
+html[data-theme='pink'] .form-check-input:checked {
+  background-color: #c9829f;
+  border-color: #c9829f;
+}

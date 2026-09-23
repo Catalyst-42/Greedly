@@ -31,6 +31,7 @@
     currency: '$',
     period: 'month',
     tailDigits: 2,
+    theme: 'dark',
     days: DEFAULT_DAYS.map(d => ({ ...d })),
     paydays: [10, 25],
     visibility: {
@@ -48,6 +49,7 @@
   const PERIODS = ['day', 'cycle', 'month', 'year'];
   const TAILS = [0, 2, 3, 4];
   const LANGUAGES = ['ru', 'en', 'zh'];
+  const THEMES = ['dark', 'light', 'pink'];
 
   function isPlainObject(v) {
     return v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -105,6 +107,7 @@
       currency: DEFAULT_CONFIG.currency,
       period: DEFAULT_CONFIG.period,
       tailDigits: DEFAULT_CONFIG.tailDigits,
+      theme: DEFAULT_CONFIG.theme,
       days: DEFAULT_DAYS.map(d => ({ ...d })),
       paydays: DEFAULT_CONFIG.paydays.slice(),
       visibility: { ...DEFAULT_CONFIG.visibility }
@@ -117,6 +120,7 @@
 
     if (CURRENCIES.includes(raw.currency)) base.currency = raw.currency;
     if (PERIODS.includes(raw.period)) base.period = raw.period;
+    if (THEMES.includes(raw.theme)) base.theme = raw.theme;
 
     const tail = Number(raw.tailDigits);
     if (TAILS.includes(tail)) base.tailDigits = tail;

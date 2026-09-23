@@ -292,9 +292,27 @@
 }
 
 .settings-title {
-  margin: 0 0 1.5rem;
+  margin: 0;
   font-size: 1.35rem;
   font-weight: 600;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.settings-close {
+  display: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: var(--bs-secondary-color);
 }
 
 .language-setting {
@@ -336,6 +354,7 @@
 .settings-primary-actions {
   min-width: 0;
   flex: 1 1 auto;
+  justify-content: flex-end;
 }
 
 .form-label {
@@ -412,11 +431,15 @@ html[lang="en"] .day-row {
   }
 
   .reset-settings {
-    margin-left: auto;
+    margin-left: 0;
   }
 
   .settings-primary-actions {
     flex: 1 1 auto;
+  }
+
+  .settings-close {
+    display: inline-flex;
   }
 
   .day-row {
