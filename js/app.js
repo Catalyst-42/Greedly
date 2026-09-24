@@ -354,12 +354,15 @@
     const now = new Date();
     const yearStart = new Date(now.getFullYear(), 0, 1);
     const yearEnd = new Date(now.getFullYear(), 11, 31);
-    Counter.ensureCalendar(yearStart, yearEnd, config).then(() => {
-      recomputeBase();
-      updateStatus();
-      renderTick();
-      if (config.visibility.calendar) renderCalendar();
-    });
+    
+    setTimeout(() => {
+      Counter.ensureCalendar(yearStart, yearEnd, config).then(() => {
+        recomputeBase();
+        updateStatus();
+        renderTick();
+        if (config.visibility.calendar) renderCalendar();
+      });
+    }, 100);
   }
 
   function showCounter() {
@@ -454,7 +457,7 @@
       recomputeBase();
       updateStatus();
       renderTick();
-})(window);
+    });
 
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && baseState && config) {
